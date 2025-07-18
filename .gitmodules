@@ -1,0 +1,24 @@
+[submodule "src/todo.infra"]
+	path = src/todo.infra
+	url = https://github.com/Abstractize/todo.infra
+[submodule "src/todo.angular-client"]
+	path = src/todo.angular-client
+	url = https://github.com/Abstractize/todo.angular-client
+[submodule "src/todo.recommendations"]
+	path = src/todo.recommendations
+	url = https://github.com/Abstractize/todo.recommendations
+[submodule "src/todo.analytics"]
+	path = src/todo.analytics
+	url = https://github.com/Abstractize/todo.analytics
+[submodule "src/todo.gateway"]
+	path = src/todo.gateway
+	url = https://github.com/Abstractize/todo.gateway
+[submodule "src/todo.common"]
+	path = src/todo.common
+	url = https://github.com/Abstractize/todo.common
+[submodule "src/todo.auth-service"]
+	path = src/todo.auth-service
+	url = https://github.com/Abstractize/todo.auth-service
+[submodule "src/todo.task-service"]
+	path = src/todo.task-service
+	url = https://github.com/Abstractize/todo.task-service
