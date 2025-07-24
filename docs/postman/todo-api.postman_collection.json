@@ -1,0 +1,739 @@
+{
+	"info": {
+		"_postman_id": "8dfddac7-143d-4d88-94ce-9c8e7eef7719",
+		"name": "Todo API",
+		"description": "Collection of endpoints for authentication, tasks, and analytics.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "46858655"
+	},
+	"item": [
+		{
+			"name": "Recommendations",
+			"item": [
+				{
+					"name": "Get Task Suggestions",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/recommendations/suggestions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"recommendations",
+								"suggestions"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "{{$randomUUID}}",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Use Task Suggestion",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"used\": true }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/recommendations/suggestions/f6494c39-9216-4861-8250-73fdab894862/use",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"recommendations",
+								"suggestions",
+								"f6494c39-9216-4861-8250-73fdab894862",
+								"use"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "{{$randomUUID}}",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parseamos el JSON de la respuesta",
+									"const response = pm.response.json();",
+									"",
+									"// Guardamos el token y refreshToken en variables de entorno",
+									"pm.collectionVariables.set(\"accessToken\", response.token);",
+									"pm.collectionVariables.set(\"refreshToken\", response.refreshToken);",
+									"pm.collectionVariables.set(\"tokenExpiry\", response.expiresAt);",
+									"",
+									"console.log(\"Tokens almacenados en variables de entorno\");"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if(pm.response.code == 200)",
+									"{",
+									"    // Parseamos el JSON de la respuesta",
+									"    const response = pm.response.json();",
+									"",
+									"    // Guardamos el token y refreshToken en variables de entorno",
+									"    pm.collectionVariables.set(\"accessToken\", response.token);",
+									"    pm.collectionVariables.set(\"refreshToken\", response.refreshToken);",
+									"    pm.collectionVariables.set(\"tokenExpiry\", response.expiresAt);",
+									"",
+									"    console.log(\"Tokens almacenados en variables de entorno\");",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/refresh-token",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"refresh-token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if(pm.response.code == 200)",
+									"{",
+									"    pm.collectionVariables.set(\"accessToken\", \"\");",
+									"    pm.collectionVariables.set(\"refreshToken\", \"\");",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/logout",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parseamos el JSON de la respuesta",
+									"const response = pm.response.json();",
+									"",
+									"// Guardamos el token y refreshToken en variables de entorno",
+									"pm.collectionVariables.set(\"accessToken\", response.token);",
+									"pm.collectionVariables.set(\"refreshToken\", response.refreshToken);",
+									"pm.collectionVariables.set(\"tokenExpiry\", response.expiresAt);",
+									"",
+									"console.log(\"Tokens almacenados en variables de entorno\");"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fullname\": \"{{fullName}}\",\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Analytics",
+			"item": [
+				{
+					"name": "Get Analytics Summary",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/analytics/summary",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"analytics",
+								"summary"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "{{$randomUUID}}",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Weekly Analytics",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/analytics/weekly?dayUtc=2025-07-21T00:00:46.0029835Z",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"analytics",
+								"weekly"
+							],
+							"query": [
+								{
+									"key": "dayUtc",
+									"value": "2025-07-21T00:00:46.0029835Z"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Task-Service",
+			"item": [
+				{
+					"name": "Tasks",
+					"item": [
+						{
+							"name": "Get all TaskLists",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/tasks/tasklist",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tasks",
+										"tasklist"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get TaskList by ID",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/tasklist/{{listId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tasklist",
+										"{{listId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create TaskList",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"title\": \"New List\",\n  \"description\": \"Descripción de la lista\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/tasks/tasklist",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tasks",
+										"tasklist"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update TaskList",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Lista Actualizada\",\n  \"description\": \"Descripción actualizada\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/tasks/tasklist/{{listId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tasks",
+										"tasklist",
+										"{{listId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete TaskList",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/tasks/tasklist/{{itemId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tasks",
+										"tasklist",
+										"{{itemId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "TaskItems",
+					"item": [
+						{
+							"name": "Get TaskItems by TaskListId",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/tasks/taskitem/{{itemId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tasks",
+										"taskitem",
+										"{{itemId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create TaskItem",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\n    \"title\": \"Nueva tarea\",\n    \"taskListId\": \"c8ebc91e-4670-43ff-a681-4f6a30fff7ab\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/tasks/taskitem",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tasks",
+										"taskitem"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update TaskItem",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"taskListId\": \"uuid-lista\",\n  \"title\": \"Tarea actualizada\",\n  \"description\": \"Detalles actualizados\",\n  \"dueDate\": \"2025-07-21T12:00:00Z\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/tasks/taskitem/{{itemId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tasks",
+										"taskitem",
+										"{{itemId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete TaskItem",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/tasks/taskitem/{{itemId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tasks",
+										"taskitem",
+										"{{itemId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{accessToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"// Solo ejecutar si requiresAuth está en true",
+					"if (pm.variables.get(\"requiresAuth\") === \"true\") {",
+					"    const tokenExpiry = pm.collectionVariables.get(\"tokenExpiry\");",
+					"    const refreshToken = pm.collectionVariables.get(\"refreshToken\");",
+					"",
+					"    if (tokenExpiry) {",
+					"        const now = new Date();",
+					"        const expiryDate = new Date(tokenExpiry);",
+					"",
+					"        if (now >= expiryDate) {",
+					"            console.log(\"Token expirado, solicitando refresh...\");",
+					"",
+					"            pm.sendRequest({",
+					"                url: 'http://localhost:8080/api/auth/refresh-token',",
+					"                method: 'POST',",
+					"                header: {",
+					"                    'Content-Type': 'application/json'",
+					"                },",
+					"                body: {",
+					"                    mode: 'raw',",
+					"                    raw: JSON.stringify({ refreshToken: refreshToken })",
+					"                }",
+					"            }, function (err, res) {",
+					"                if (err) {",
+					"                    console.error(\"Error refrescando token\", err);",
+					"                    return;",
+					"                }",
+					"",
+					"                if (res.code === 200) {",
+					"                    const json = res.json();",
+					"                    pm.collectionVariables.set(\"accessToken\", json.token);",
+					"                    pm.collectionVariables.set(\"refreshToken\", json.refreshToken);",
+					"                    pm.collectionVariables.set(\"tokenExpiry\", json.expiresAt);",
+					"                    console.log(\"Token refrescado automáticamente\");",
+					"                } else {",
+					"                    console.warn(\"No se pudo refrescar token, código:\", res.code);",
+					"                }",
+					"            });",
+					"        }",
+					"    }",
+					"}"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080/api",
+			"type": "string"
+		},
+		{
+			"key": "fullName",
+			"value": "La Poderosa Cucaracha",
+			"type": "string"
+		},
+		{
+			"key": "email",
+			"value": "email@email.com",
+			"type": "string"
+		},
+		{
+			"key": "password",
+			"value": "password",
+			"type": "string"
+		},
+		{
+			"key": "accessToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "refreshToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "tokenExpiry",
+			"value": ""
+		}
+	]
+}
