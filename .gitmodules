@@ -22,3 +22,6 @@
 [submodule "src/todo.task-service"]
 	path = src/todo.task-service
 	url = https://github.com/Abstractize/todo.task-service
+[submodule "src/todo.db"]
+	path = src/todo.db
+	url = https://github.com/Abstractize/todo.db
