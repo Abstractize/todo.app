@@ -77,7 +77,7 @@ services:
     depends_on:
       - db
     volumes:
-      - ./src/services/recommendations:/app/src/app
+      - ./src/services/recommendations/src/app:/app/src/app
 
   db:
     image: postgres:14.3
