@@ -25,3 +25,6 @@
 [submodule "src/todo.db"]
 	path = src/db
 	url = https://github.com/Abstractize/todo.db
+[submodule "src/ui/todo.react-native-mobile"]
+	path = src/ui/mobile
+	url = https://github.com/Abstractize/todo.react-native-mobile
