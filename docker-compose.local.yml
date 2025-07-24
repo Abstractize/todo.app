@@ -1,0 +1,91 @@
+x-common-variables: &common-env
+  ASPNETCORE_ENVIRONMENT: Development
+  JWT_ISSUER: ${JWT_ISSUER}
+  JWT_AUDIENCE: ${JWT_AUDIENCE}
+  JWT_KEY: ${JWT_KEY}
+
+x-common-args: &common-args
+    GITHUB_USERNAME: ${GITHUB_USERNAME}
+    GITHUB_TOKEN: ${GITHUB_TOKEN}
+
+services:
+  angular-ui:
+    build:
+      dockerfile: Dockerfile.local
+    volumes:
+      - ./src/ui/web:/app
+      - /app/node_modules
+
+  gateway:
+    build:
+      dockerfile: Dockerfile.local
+      args:
+        <<: *common-args
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./src/gateway:/app/src
+    environment:
+      <<: *common-env
+
+  auth-service:
+    build:
+      dockerfile: Dockerfile.local
+      args:
+        <<: *common-args
+    volumes:
+      - ./src/services/auth:/app/src
+    depends_on:
+      - db
+    environment:
+      <<: *common-env
+      SQL_CONNECTION_STRING: ${SQL_CONNECTION_STRING_AUTH}
+  
+  task-service:
+    build:
+      dockerfile: Dockerfile.local
+      args:
+        <<: *common-args
+    volumes:
+      - ./src/services/tasks:/app/src
+    depends_on:
+      - db
+    environment:
+      <<: *common-env
+      SQL_CONNECTION_STRING: ${SQL_CONNECTION_STRING_TASK}
+
+  analytics-service:
+    build:
+      dockerfile: Dockerfile.local
+    depends_on:
+      - db
+    environment:
+      <<: *common-env
+      SQL_URL: ${SQL_CONNECTION_STRING_ANALYTICS}
+      SQL_USERNAME: ${SQL_USERNAME}
+      SQL_PASSWORD: ${SQL_PASSWORD}
+      SQL_DDL_AUTO: update
+      SQL_DRIVER: org.postgresql.Driver
+      SQL_DIALECT: org.hibernate.dialect.PostgreSQLDialect
+
+  recommendations-service:
+    build:
+      dockerfile: Dockerfile.local
+    environment:
+      <<: *common-env
+      SQL_CONNECTION_STRING: ${SQL_CONNECTION_STRING_RECOMMENDATIONS}
+    depends_on:
+      - db
+    volumes:
+      - ./src/services/recommendations:/app/src/app
+
+  db:
+    image: postgres:14.3
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${SQL_USERNAME}
+      POSTGRES_PASSWORD: ${SQL_PASSWORD}
+    volumes:
+      - ./src/db/data:/var/lib/postgresql/data
+      - ./src/db/init:/docker-entrypoint-initdb.d/

@@ -1,0 +1,41 @@
+services:
+
+  # UI
+  angular-ui:
+    build:
+      context: ./src/ui/web/
+    depends_on:
+      - gateway
+
+  # GATEWAY
+  gateway:
+    build:
+      context: ./src/gateway/
+    depends_on:
+      - auth-service
+      - task-service
+      - analytics-service
+      - recommendations-service
+
+  # SERVICES
+  auth-service:
+    build:
+      context: ./src/services/auth/
+
+  task-service:
+    platform: linux/amd64
+    build:
+      context: ./src/services/tasks/
+
+
+  analytics-service:
+    build:
+      context: ./src/services/analytics/
+    depends_on:
+      - task-service
+
+  recommendations-service:
+    build:
+      context: ./src/services/recommendations/
+
+

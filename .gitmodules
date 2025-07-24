@@ -1,27 +1,27 @@
 [submodule "src/todo.infra"]
-	path = src/todo.infra
+	path = src/infra
 	url = https://github.com/Abstractize/todo.infra
 [submodule "src/todo.angular-client"]
-	path = src/todo.angular-client
+	path = src/ui/web
 	url = https://github.com/Abstractize/todo.angular-client
 [submodule "src/todo.recommendations"]
-	path = src/todo.recommendations
+	path = src/services/recommendations
 	url = https://github.com/Abstractize/todo.recommendations
 [submodule "src/todo.analytics"]
-	path = src/todo.analytics
+	path = src/services/analytics
 	url = https://github.com/Abstractize/todo.analytics
 [submodule "src/todo.gateway"]
-	path = src/todo.gateway
+	path = src/gateway
 	url = https://github.com/Abstractize/todo.gateway
 [submodule "src/todo.common"]
-	path = src/todo.common
+	path = src/libs/common
 	url = https://github.com/Abstractize/todo.common
 [submodule "src/todo.auth-service"]
-	path = src/todo.auth-service
+	path = src/services/auth
 	url = https://github.com/Abstractize/todo.auth-service
 [submodule "src/todo.task-service"]
-	path = src/todo.task-service
+	path = src/services/tasks
 	url = https://github.com/Abstractize/todo.task-service
 [submodule "src/todo.db"]
-	path = src/todo.db
+	path = src/db
 	url = https://github.com/Abstractize/todo.db
