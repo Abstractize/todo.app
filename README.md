@@ -36,8 +36,8 @@ todo.monorepo/
 │   │   └── todo.common/        # Shared libraries and utilities 🧰
 │   ├── services/
 │   │   ├── todo.recommendation/   # Recommendation microservice 🤖 (Python, FastAPI)
-│   │   ├── todo.analytics/        # Analytics microservice 📊 (Python, FastAPI)
-│   │   ├── todo.auth-service/     # Auth microservice 🔐 (Python, FastAPI)
+│   │   ├── todo.analytics/        # Analytics microservice 📊 (Java, Spring Boot)
+│   │   ├── todo.auth-service/     # Auth microservice 🔐 (.NET Core)
 │   │   ├── todo.task-service/     # Task management microservice ✅ (.NET Core)
 │   ├── gateway/                # API Gateway service 🚪 (.NET Core, YARP)
 ├── docs/                       # Project documentation 📚
@@ -64,7 +64,7 @@ flowchart TD
   end
 
   subgraph Services
-    D["Auth Service (Python, FastAPI)"]
+    D["Auth Service (.NET Core)"]
     E["Task Service (.NET)"]
     F["Analytics Service (Java, Spring Boot)"]
     G["Recommendations Service (Python, FastAPI)"]
