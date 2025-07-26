@@ -8,9 +8,10 @@ This monorepo contains the complete suite of services and clients for the TODO a
 
 Here are some screenshots of the TODO platform in action:
 
-| Task Lists | Landing Page | Analytics Dashboard |
+| Task Lists | Login | Analytics Dashboard |
 |:-----------------:|:------------------------:|:-------------------:|
-| ![Task Lists](docs/images/lists.png) | ![Landing](docs/images/landing.png) | ![Analytics](docs/images/stats.png) |
+| ![Task Lists](docs/images/web/lists.png) | ![Login](docs/images/web/login.png) | ![Analytics](docs/images/web/stats.png) |
+| ![Task Lists (Mobile)](docs/images/mobile/task-list.png) | ![Login (Mobile)](docs/images/mobile/login.png) | ![Analytics (Mobile)](docs/images/mobile/stats.png) |
 
 > _For more visuals, see the `docs/images/` directory._
 
